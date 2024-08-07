@@ -1,12 +1,15 @@
-import { genSalt, hash, compare } from 'bcryptjs';
-import { sign } from 'jsonwebtoken';
-import User, { findOne } from '../models/User';
+import pkg from 'bcryptjs';
+const { genSalt, hash, compare } = pkg;
+import pkgToken from 'jsonwebtoken';
+const { sign } = pkgToken;
+import User from '../models/User.js';
 
 export async function register(req, res) {
   const { username, password } = req.body;
   
   try {
-    let user = await findOne({ username });
+    console.log("register")
+    let user = await User.findOne({ username });
     if (user) {
       return res.status(400).json({ msg: 'User already exists' });
     }
@@ -39,7 +42,7 @@ export async function login(req, res) {
   const { username, password } = req.body;
   
   try {
-    let user = await findOne({ username });
+    let user = await User.findOne({ username });
     if (!user) {
       return res.status(400).json({ msg: 'Invalid credentials' });
     }
